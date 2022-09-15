@@ -1,0 +1,76 @@
+serviceMetaInfo:
+  host: http://account-service
+  port: 6000
+  serviceAppName: account-service # spring.application.name
+  contextPath: /accounts
+  ...
+
+
+springConfig:
+  security:
+    oauth2:
+      resource:
+        user-info-uri: http://auth-service:5000/uaa/users/current
+  ... 
+
+
+restapis:
+  '/{name}':
+    GET: 
+      method: '<com.piggymetrics.account.controller.AccountController: com.piggymetrics.account.domain.Account getAccountByName(java.lang.String)>'
+      security: 
+        - oauth2.hasScope('server')
+        - name.equals('demo')
+      parameters:
+        name: 
+          in: path # or query, cookie, ...
+          type: String
+        .. 
+      response:
+        '200': 
+          data: 
+            object: 'com.piggymetrics.account.domain.Account'
+        '400': 
+          ...     
+  '/current':
+    GET: 
+      method: '<com.piggymetrics.account.controller.AccountController: com.piggymetrics.account.domain.Account getCurrentAccount(java.security.Principal)>'
+      security: 
+        .. 
+      parameters: 
+        .. 
+      response:
+        '200':
+          data: 
+            object: 'com.piggymetrics.account.domain.Account'
+        ... 
+    PUT: 
+      method: '<com.piggymetrics.account.controller.AccountController: void saveCurrentAccount(java.security.Principal,com.piggymetrics.account.domain.Account)>'
+      security: 
+        .. 
+      parameters: 
+        .. 
+      requestBody: 
+        data:
+          object: 'com.piggymetrics.account.domain.User'
+      response:
+        '200':
+          data: 
+            object: 'com.piggymetrics.account.domain.Account'
+        ... 
+
+
+calls:
+  method: '<com.piggymetrics.account.client.StatisticsServiceClient: java.util.List getStatisticsByAccountName(java.lang.String)>'
+    serviceName: 'statistics-service'
+    endpoint: '/statistics/{accountName}'
+    httpMethod: GET
+    parameters: 
+      accountName: 
+        in: path
+        type: string
+    security: 
+      ... 
+    ... 
+  method: 
+    ... 
