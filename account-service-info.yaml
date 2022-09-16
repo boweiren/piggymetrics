@@ -56,7 +56,7 @@ restapis:
       response:
         '200':
           data: 
-            object: 'com.piggymetrics.account.domain.Account'
+            object: 'com.piggymetrics.account.domain.Account' # ?
         ... 
 
 

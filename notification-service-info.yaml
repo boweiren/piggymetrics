@@ -14,16 +14,45 @@ springConfig:
   ...
 
 restapis:
-  '/recipients':
+  '/recipients/current':
     GET: 
-      method: '<com.piggymetrics.notification.controller.NotificationController: java.util.List<com.piggymetrics.notification.domain.Recipient> getRecipients()>'
+      method: '<com.piggymetrics.notification.controller.RecipientController: com.piggymetrics.notification.domain.Recipient
+getCurrentNotificationsSettings(java.security.Principle)>'
       security: 
-        - oauth2.hasScope('server')
+        ..
       parameters: 
         .. 
       response:
         '200': 
           data: 
-            object: 'java.util.List<com.piggymetrics.notification.domain.Recipient>'
+            object: 'com.piggymetrics.notification.domain.Recipient'
         '400': 
           ...
+    PUT:
+      method: '<com.piggymetrics.notification.controller.RecipientController: com.piggymetrics.notification.domain.Recipient
+saveCurrentNotificationsSettings(java.security.Principle, com.piggymetrics.notification.domain.Recipient)>'
+      security:
+        ..
+      parameters:
+        name:
+          in: body
+          type: Recipient
+        ..
+      response:
+        '200':
+          data:
+            object: 'com.piggymetrics.notification.domain.Recipient'
+        '400':
+          ...
+
+calls:
+  method: 'com.piggymetrics.notification.client.AccountServiceClient: com.piggymetrics.account.domain.Account getAccountByName(java.lang.String)>'
+  serviceName: 'account-service'
+  endpoint: '/accounts/{accountName}'
+  httpMethod: GET
+  parameters:
+    accountName:
+      in: path
+      type: string
+      security:
+        ...
