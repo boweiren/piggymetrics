@@ -15,15 +15,6 @@ springConfig:
 
 restapis:
   '/recipients':
-    GET: 
-      method: '<com.piggymetrics.notification.controller.NotificationController: java.util.List<com.piggymetrics.notification.domain.Recipient> getRecipients()>'
-      security: 
-        - oauth2.hasScope('server')
-      parameters: 
-        .. 
-      response:
-        '200': 
-          data: 
-            object: 'java.util.List<com.piggymetrics.notification.domain.Recipient>'
-        '400': 
-          ...
+    ...
+  '/current':
+    
