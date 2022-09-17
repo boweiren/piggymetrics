@@ -15,7 +15,10 @@ restapis:
     GET: 
       method: '<com.piggymetrics.notification.controller.RecipientController: com.piggymetrics.notification.domain.Recipient getCurrentNotificationsSettings(java.security.Principle)>'
       # security: 
-      # parameters: 
+      parameters:
+        principal:
+          in: body
+          type: java.security.Principal
       response:
         '200': 
           description: 'OK'
@@ -32,6 +35,9 @@ restapis:
       method: '<com.piggymetrics.notification.controller.RecipientController: com.piggymetrics.notification.domain.Recipient saveCurrentNotificationsSettings(java.security.Principle, com.piggymetrics.notification.domain.Recipient)>'
       # security:
       parameters:
+        principal:
+          in: body
+          type: java.security.Principal
         recipient:
           in: body
           type: Recipient
@@ -48,12 +54,12 @@ restapis:
           description: 'Not Found'
 
 calls:
-  method: 'com.piggymetrics.notification.client.AccountServiceClient: com.piggymetrics.account.domain.Account getAccountByName(java.lang.String)>'
+  'com.piggymetrics.notification.client.AccountServiceClient: com.piggymetrics.account.domain.Account getAccountByName(java.lang.String)>':
     serviceName: 'account-service'
     endpoint: '/accounts/{accountName}'
     httpMethod: GET
     parameters:
       name:
         in: path
-        type: string
+        type: java.lang.String
         # security:

@@ -40,7 +40,7 @@ restapis:
       parameters:
         name:
           in: path # or query, cookie, ...
-          type: String
+          type: java.lang.String
       response:
         '200': 
           description: 'OK'
@@ -57,7 +57,10 @@ restapis:
     GET: 
       method: '<com.piggymetrics.account.controller.AccountController: com.piggymetrics.account.domain.Account getCurrentAccount(java.security.Principal)>'
       # security: 
-      # parameters: 
+      parameters:
+        principal:
+          in: body
+          type: java.security.Principal
       response:
         '200':
           description: 'OK'
@@ -73,8 +76,11 @@ restapis:
     PUT: 
       method: '<com.piggymetrics.account.controller.AccountController: void saveCurrentAccount(java.security.Principal,com.piggymetrics.account.domain.Account)>'
       # security: 
-      parameters: 
-        name:
+      parameters:
+        principal:
+          in: body
+          type: java.security.Principal
+        account:
           in: body
           type: com.piggymetrics.statistics.domain.Account
       requestBody: 
@@ -92,14 +98,14 @@ restapis:
 
 
 calls:
-  method: '<com.piggymetrics.account.client.StatisticsServiceClient: java.util.List getStatisticsByAccountName(java.lang.String)>'
+  '<com.piggymetrics.account.client.StatisticsServiceClient: java.util.List getStatisticsByAccountName(java.lang.String)>':
     serviceName: 'statistics-service'
     endpoint: '/statistics/{accountName}'
     httpMethod: GET
     parameters: 
       accountName: 
         in: path
-        type: String
-    security: 
+        type: java.lang.String
+    security:
       - oauth2.hasScope('server')
       - name.equals('demo')

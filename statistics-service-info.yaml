@@ -15,7 +15,10 @@ restapis:
     GET:
       method: '<com.piggymetrics.statistics.controller.StatisticsController: java.util.List<com.piggymetrics.statistics.domain.timeseries.DataPoint> getCurrentAccountStatistics(java.security.Principal)>'
       # security:
-      # parameters:
+      parameters:
+        principal:
+          in: body
+          type: java.security.Principal
       response:
         '200':
           description: 'OK'
@@ -37,7 +40,7 @@ restapis:
       parameters:
         accountName:
           in: path
-          type: String
+          type: java.lang.String
       response:
         '200':
           description: 'OK'
@@ -56,7 +59,7 @@ restapis:
       parameters:
         accountName:
           in: path
-          type: String
+          type: java.lang.String
         account:
           in: body
           type: com.piggymetrics.statistics.domain.Account
@@ -69,10 +72,6 @@ restapis:
           description: 'Forbidden'
         '404':
           description: 'Not Found'
-
-# calls:
-  # method: '<com.piggymetrics.statistics.client.ExchangeRatesClient: >'
-  # seems it is not calling any external api?
 
 
 
