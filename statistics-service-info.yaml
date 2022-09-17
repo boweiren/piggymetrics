@@ -9,56 +9,70 @@ springConfig:
     oauth2:
       resource:
         user-info-uri: http://auth-service:5000/uaa/users/current
-  ..
 
 restapis:
   '/current':
     GET:
-      method: '<com.piggymetrics.statistics.controller.StatisticsController: java.util.List<com.piggymetrics.statistics.domain.timeseries.DataPoint> getCurrentAccountStatistics()>'
-      security:
-        ..
-      parameters:
-        ..
+      method: '<com.piggymetrics.statistics.controller.StatisticsController: java.util.List<com.piggymetrics.statistics.domain.timeseries.DataPoint> getCurrentAccountStatistics(java.security.Principal)>'
+      # security:
+      # parameters:
       response:
         '200':
+          description: 'OK'
           data:
             object: 'java.util.List<com.piggymetrics.statistics.domain.timeseries.DataPoint>'
-        '400':
-          ...
+        '401':
+          description: 'Unauthorized'
+        '403':
+          description: 'Forbidden'
+        '404':
+          description: 'Not Found'
+
   '/{accountName}':
     GET:
-      method: '<com.piggymetrics.statistics.controller.StatisticsController: java.util.List<com.piggymetrics.statistics.domain.timeseries.DataPoint> getStatisticsByAccountName(java.lang.String)>'
+      method: '<com.piggymetrics.statistics.controller.StatisticsController: java.util.List<com.piggymetrics.statistics.domain.timeseries.DataPoint> getStatisticsByAccountName(java.security.Principal, java.lang.String)>'
       security:
         - oauth2.hasScope('server')
         - name.equals('demo')
       parameters:
-        name:
+        accountName:
           in: path
           type: String
-        ..
       response:
         '200':
+          description: 'OK'
           data:
             object: 'java.util.List<com.piggymetrics.statistics.domain.timeseries.DataPoint>'
-        '400':
-          ...
+        '401':
+          description: 'Unauthorized'
+        '403':
+          description: 'Forbidden'
+        '404':
+          description: 'Not Found'
     PUT:
       method: '<com.piggymetrics.statistics.controller.StatisticsController: void saveAccountStatistics(java.lang.String, com.piggymetrics.statistics.domain.Account)>'
       security:
         - oauth2.hasScope('server')
       parameters:
-        name:
-          in: path, body
-          type: java.lang.String, com.piggymetrics.statistics.domain.Account
+        accountName:
+          in: path
+          type: String
+        account:
+          in: body
+          type: com.piggymetrics.statistics.domain.Account
       response:
         '200':
-          ...
-        '400':
-          ...
+          description: 'OK'
+        '401':
+          description: 'Unauthorized'
+        '403':
+          description: 'Forbidden'
+        '404':
+          description: 'Not Found'
 
-calls:
+# calls:
   # method: '<com.piggymetrics.statistics.client.ExchangeRatesClient: >'
-  # seems it is not calling any outer api?
+  # seems it is not calling any external api?
 
 
 
