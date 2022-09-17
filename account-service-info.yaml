@@ -14,11 +14,11 @@ restapis:
   '/': 
     POST:
       method: '<com.piggymetrics.account.controller.AccountController: com.piggymetrics.account.domain.Account createNewAccount(com.piggymetrics.account.domain.User)>'
-      security:
+      # security:
       parameters:
-        name: user
-        in: body
-        type: com.piggymetrics.account.domain.User
+        user:
+          in: body
+          type: com.piggymetrics.account.domain.User
       response:
         '200':
           description: 'OK'
@@ -38,8 +38,8 @@ restapis:
         - oauth2.hasScope('server')
         - name.equals('demo')
       parameters:
-        name: name
-          in: path # or query, co'OK'ie, ...
+        name:
+          in: path # or query, cookie, ...
           type: String
       response:
         '200': 
@@ -56,8 +56,8 @@ restapis:
   '/current':
     GET: 
       method: '<com.piggymetrics.account.controller.AccountController: com.piggymetrics.account.domain.Account getCurrentAccount(java.security.Principal)>'
-      security: 
-      parameters: 
+      # security: 
+      # parameters: 
       response:
         '200':
           description: 'OK'
@@ -72,11 +72,11 @@ restapis:
 
     PUT: 
       method: '<com.piggymetrics.account.controller.AccountController: void saveCurrentAccount(java.security.Principal,com.piggymetrics.account.domain.Account)>'
-      security: 
+      # security: 
       parameters: 
         name:
-            in: body
-            type: com.piggymetrics.statistics.domain.Account
+          in: body
+          type: com.piggymetrics.statistics.domain.Account
       requestBody: 
         data:
           object: 'com.piggymetrics.account.domain.User'
