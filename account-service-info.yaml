@@ -109,3 +109,14 @@ calls:
     security:
       - oauth2.hasScope('server')
       - name.equals('demo')
+
+  '<com.piggymetrics.account.client.AuthServiceClient: void createUser(com.piggymetrics.account.domain.User)>':
+    serviceName: 'auth-service'
+    endpoint: '/uaa/users'
+    httpMethod: POST
+    parameters:
+      user:
+        in: body
+        type: com.piggymetrics.account.domain.User
+    security:
+      - oauth2.hasScope('server')
