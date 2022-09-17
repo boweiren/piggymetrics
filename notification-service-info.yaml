@@ -3,56 +3,57 @@ serviceMetaInfo:
   port: 8000
   serviceAppName: notification-service # spring.application.name
   contextPath: /notifications
-  ...
-
 
 springConfig:
   security:
     oauth2:
       resource:
         user-info-uri: http://auth-service:5000/uaa/users/current
-  ...
 
 restapis:
   '/recipients/current':
     GET: 
-      method: '<com.piggymetrics.notification.controller.RecipientController: com.piggymetrics.notification.domain.Recipient
-getCurrentNotificationsSettings(java.security.Principle)>'
-      security: 
-        ..
-      parameters: 
-        .. 
+      method: '<com.piggymetrics.notification.controller.RecipientController: com.piggymetrics.notification.domain.Recipient getCurrentNotificationsSettings(java.security.Principle)>'
+      # security: 
+      # parameters: 
       response:
         '200': 
+          description: 'OK'
           data: 
             object: 'com.piggymetrics.notification.domain.Recipient'
-        '400': 
-          ...
+        '401':
+          description: 'Unauthorized'
+        '403':
+          description: 'Forbidden'
+        '404':
+          description: 'Not Found'
+
     PUT:
-      method: '<com.piggymetrics.notification.controller.RecipientController: com.piggymetrics.notification.domain.Recipient
-saveCurrentNotificationsSettings(java.security.Principle, com.piggymetrics.notification.domain.Recipient)>'
-      security:
-        ..
+      method: '<com.piggymetrics.notification.controller.RecipientController: com.piggymetrics.notification.domain.Recipient saveCurrentNotificationsSettings(java.security.Principle, com.piggymetrics.notification.domain.Recipient)>'
+      # security:
       parameters:
-        name:
+        recipient:
           in: body
           type: Recipient
-        ..
       response:
         '200':
+          description: 'OK'
           data:
             object: 'com.piggymetrics.notification.domain.Recipient'
-        '400':
-          ...
+        '401':
+          description: 'Unauthorized'
+        '403':
+          description: 'Forbidden'
+        '404':
+          description: 'Not Found'
 
 calls:
   method: 'com.piggymetrics.notification.client.AccountServiceClient: com.piggymetrics.account.domain.Account getAccountByName(java.lang.String)>'
-  serviceName: 'account-service'
-  endpoint: '/accounts/{accountName}'
-  httpMethod: GET
-  parameters:
-    accountName:
-      in: path
-      type: string
-      security:
-        ...
+    serviceName: 'account-service'
+    endpoint: '/accounts/{accountName}'
+    httpMethod: GET
+    parameters:
+      name:
+        in: path
+        type: string
+        # security:
