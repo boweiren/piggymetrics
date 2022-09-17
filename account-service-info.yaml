@@ -11,6 +11,26 @@ springConfig:
         user-info-uri: http://auth-service:5000/uaa/users/current
 
 restapis:
+  '/': 
+    POST:
+      method: '<com.piggymetrics.account.controller.AccountController: com.piggymetrics.account.domain.Account createNewAccount(com.piggymetrics.account.domain.User)>'
+      security:
+      parameters:
+        name: user
+        in: body
+        type: com.piggymetrics.account.domain.User
+      response:
+        '200':
+          description: 'OK'
+          data:
+            object: 'com.piggymetrics.account.domain.Account'
+        '401':
+          description: 'Unauthorized'
+        '403':
+          description: 'Forbidden'
+        '404':
+          description: 'Not Found'
+
   '/{name}':
     GET: 
       method: '<com.piggymetrics.account.controller.AccountController: com.piggymetrics.account.domain.Account getAccountByName(java.lang.String)>'
@@ -19,19 +39,19 @@ restapis:
         - name.equals('demo')
       parameters:
         name: name
-          in: path # or query, cookie, ...
+          in: path # or query, co'OK'ie, ...
           type: String
       response:
         '200': 
-          description: OK
+          description: 'OK'
           data: 
             object: 'com.piggymetrics.account.domain.Account'
         '401':
-          description: Unauthorized
+          description: 'Unauthorized'
         '403':
-          description: Forbidden
+          description: 'Forbidden'
         '404':
-          description: Not Found 
+          description: 'Not Found' 
           
   '/current':
     GET: 
@@ -40,15 +60,15 @@ restapis:
       parameters: 
       response:
         '200':
-          description: OK
+          description: 'OK'
           data: 
             object: 'com.piggymetrics.account.domain.Account'
         '401':
-          description: Unauthorized
+          description: 'Unauthorized'
         '403':
-          description: Forbidden
+          description: 'Forbidden'
         '404':
-          description: Not Found 
+          description: 'Not Found' 
 
     PUT: 
       method: '<com.piggymetrics.account.controller.AccountController: void saveCurrentAccount(java.security.Principal,com.piggymetrics.account.domain.Account)>'
@@ -62,13 +82,13 @@ restapis:
           object: 'com.piggymetrics.account.domain.User'
       response:
         '200':  # since the method is void, the response should be empty?
-          description: OK
+          description: 'OK'
         '401':
-          description: Unauthorized
+          description: 'Unauthorized'
         '403':
-          description: Forbidden
+          description: 'Forbidden'
         '404':
-          description: Not Found 
+          description: 'Not Found' 
 
 
 calls:
