@@ -3,16 +3,12 @@ serviceMetaInfo:
   port: 6000
   serviceAppName: account-service # spring.application.name
   contextPath: /accounts
-  ...
-
 
 springConfig:
   security:
     oauth2:
       resource:
         user-info-uri: http://auth-service:5000/uaa/users/current
-  ... 
-
 
 restapis:
   '/{name}':
@@ -22,42 +18,57 @@ restapis:
         - oauth2.hasScope('server')
         - name.equals('demo')
       parameters:
-        name: 
+        name: name
           in: path # or query, cookie, ...
           type: String
-        .. 
       response:
         '200': 
+          description: OK
           data: 
             object: 'com.piggymetrics.account.domain.Account'
-        '400': 
-          ...     
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found 
+          
   '/current':
     GET: 
       method: '<com.piggymetrics.account.controller.AccountController: com.piggymetrics.account.domain.Account getCurrentAccount(java.security.Principal)>'
       security: 
-        .. 
       parameters: 
-        .. 
       response:
         '200':
+          description: OK
           data: 
             object: 'com.piggymetrics.account.domain.Account'
-        ... 
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found 
+
     PUT: 
       method: '<com.piggymetrics.account.controller.AccountController: void saveCurrentAccount(java.security.Principal,com.piggymetrics.account.domain.Account)>'
       security: 
-        .. 
       parameters: 
-        .. 
+        name:
+            in: body
+            type: com.piggymetrics.statistics.domain.Account
       requestBody: 
         data:
           object: 'com.piggymetrics.account.domain.User'
       response:
-        '200':
-          data: 
-            object: 'com.piggymetrics.account.domain.Account' # ?
-        ... 
+        '200':  # since the method is void, the response should be empty?
+          description: OK
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found 
 
 
 calls:
@@ -68,9 +79,7 @@ calls:
     parameters: 
       accountName: 
         in: path
-        type: string
+        type: String
     security: 
-      ... 
-    ... 
-  method: 
-    ... 
+      - oauth2.hasScope('server')
+      - name.equals('demo')
