@@ -29,7 +29,7 @@ restapis:
 
   '/users':
     POST:
-      method: '<<com.piggymetrics.auth.controller.UserController: void createUser(com.piggymetrics.auth.domain.User)>'
+      method: '<com.piggymetrics.auth.controller.UserController: void createUser(com.piggymetrics.auth.domain.User)>'
       security:
         - oauth2.hasScope('server')
       parameters:
