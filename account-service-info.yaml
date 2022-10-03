@@ -14,7 +14,10 @@ restapis:
   '/': 
     POST:
       method: '<com.piggymetrics.account.controller.AccountController: com.piggymetrics.account.domain.Account createNewAccount(com.piggymetrics.account.domain.User)>'
-      # security:
+      # method2: '<com.piggymetrics.account.client.AuthServiceClient void createUser(com.piggymetrics.account.domain.User)>'
+      # method3: '<org.springframework.data.repository.CrudRepository com.piggymetrics.account.domain.Account save(com.piggymetrics.account.domain.Account)>'
+      security:
+        - authClient.createUser(user)   # security rely on auth service?
       parameters:
         user:
           in: body
@@ -34,9 +37,15 @@ restapis:
   '/{name}':
     GET: 
       method: '<com.piggymetrics.account.controller.AccountController: com.piggymetrics.account.domain.Account getAccountByName(java.lang.String)>'
+      # method2: '<com.piggymetrics.account.repository.AccountRepository: com.piggymetrics.account.domain.Account findByName(java.lang.String)>'
+      # method3: '<org.springframework.data.repository.CrudRepository: java.util.Optional findById(java.lang.String)>'
+      # method4: 'org.springframework.data.repository.Repository'
+      # so, this account repository is extending Spring Data central repository interface
+      # findBy<Name> is a Spring Data convention
       security: 
         - oauth2.hasScope('server')
         - name.equals('demo')
+        - hasLength()   # Assert.hasLength(accountName) # Is this related to security?
       parameters:
         name:
           in: path # or query, cookie, ...
