@@ -45,7 +45,7 @@ restapis:
       security: 
         - oauth2.hasScope('server')
         - name.equals('demo')
-        - hasLength()   # Assert.hasLength(accountName) # Is this related to security?
+        - Assert.hasLength(accountName) # Is this related to security?
         # what is the difference between input filtering and security?
       parameters:
         name:
