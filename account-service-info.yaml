@@ -16,8 +16,8 @@ restapis:
       method: '<com.piggymetrics.account.controller.AccountController: com.piggymetrics.account.domain.Account createNewAccount(com.piggymetrics.account.domain.User)>'
       # method2: '<com.piggymetrics.account.client.AuthServiceClient void createUser(com.piggymetrics.account.domain.User)>'
       # method3: '<org.springframework.data.repository.CrudRepository com.piggymetrics.account.domain.Account save(com.piggymetrics.account.domain.Account)>'
-      security:
-        - authClient.createUser(user)   # security rely on auth service?
+      # security:
+        # - authClient.createUser(user)   # security rely on auth service?
       parameters:
         user:
           in: body
@@ -46,6 +46,7 @@ restapis:
         - oauth2.hasScope('server')
         - name.equals('demo')
         - hasLength()   # Assert.hasLength(accountName) # Is this related to security?
+        # what is the difference between input filtering and security?
       parameters:
         name:
           in: path # or query, cookie, ...
@@ -65,7 +66,13 @@ restapis:
   '/current':
     GET: 
       method: '<com.piggymetrics.account.controller.AccountController: com.piggymetrics.account.domain.Account getCurrentAccount(java.security.Principal)>'
-      # security: 
+      # very similar to the above one, only difference is the use of principal
+      # method2: '<com.piggymetrics.account.repository.AccountRepository: com.piggymetrics.account.domain.Account findByName(java.lang.String)>'
+      # method3: '<org.springframework.data.repository.CrudRepository: java.util.Optional findById(java.lang.String)>'
+      # method4: 'org.springframework.data.repository.Repository'
+      security:
+        - java.security.Principal.getName()
+        - Assert.notNull()
       parameters:
         principal:
           in: body
@@ -84,7 +91,13 @@ restapis:
 
     PUT: 
       method: '<com.piggymetrics.account.controller.AccountController: void saveCurrentAccount(java.security.Principal,com.piggymetrics.account.domain.Account)>'
-      # security: 
+      # method2: '<com.piggymetrics.account.repository.AccountRepository: com.piggymetrics.account.domain.Account findByName(java.lang.String)>'
+      # method3: '<org.springframework.data.repository.CrudRepository: java.util.Optional findById(java.lang.String)>'
+      # method4: 'org.springframework.data.repository.Repository'
+      # method5: '<org.springframework.data.repository.CrudRepository com.piggymetrics.account.domain.Account save(com.piggymetrics.account.domain.Account)>'
+      security:
+        - java.security.Principal.getName()
+        - @Valid @RequestBody
       parameters:
         principal:
           in: body
