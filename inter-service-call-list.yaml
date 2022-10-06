@@ -1,0 +1,38 @@
+interServiceCalls:
+  '<com.piggymetrics.account.client.StatisticsServiceClient: java.util.List getStatisticsByAccountName(java.lang.String)>':
+    serviceName: 'statistics-service'
+    endpoint: '/statistics/{accountName}'
+    httpMethod: GET
+    parameters:
+      accountName:
+        in: path
+        type: java.lang.String
+    security:
+      - oauth2.hasScope('server')
+      - name.equals('demo')
+
+  '<com.piggymetrics.account.client.AuthServiceClient: void createUser(com.piggymetrics.account.domain.User)>':
+    serviceName: 'auth-service'
+    endpoint: '/uaa/users'
+    httpMethod: POST
+    parameters:
+      user:
+        in: body
+        type: com.piggymetrics.account.domain.User
+    security:
+      - oauth2.hasScope('server')
+      - @Valid
+
+  'com.piggymetrics.notification.client.AccountServiceClient: com.piggymetrics.account.domain.Account getAccountByName(java.lang.String)>':
+    serviceName: 'account-service'
+    endpoint: '/accounts/{accountName}'
+    httpMethod: GET
+    parameters:
+      name:
+        in: path
+        type: java.lang.String
+    security:
+      - oauth2.hasScope('server')
+      - name.equals('demo')
+      - Assert.hasLength(accountName)
+
