@@ -14,7 +14,11 @@ restapis:
   '/current':
     GET:
       method: '<com.piggymetrics.statistics.controller.StatisticsController: java.util.List<com.piggymetrics.statistics.domain.timeseries.DataPoint> getCurrentAccountStatistics(java.security.Principal)>'
-      # security:
+      # method2: '<com.piggymetrics.statistics.service.StatisticsService: java.util.List<com.piggymetrics.statistics.domain.timeseries.DataPoint> findByAccountName(java.lang.String)>'
+      # method3: '<com.piggymetrics.statistics.repository.DataPointRepository: java.util.List<com.piggymetrics.statistics.domain.timeseries.DataPoint findByIdAccount(java.lang.String)>'
+      # Another repository, with findBy<IdAccount> method
+      security:
+        - principal.getName()
       parameters:
         principal:
           in: body
@@ -34,6 +38,7 @@ restapis:
   '/{accountName}':
     GET:
       method: '<com.piggymetrics.statistics.controller.StatisticsController: java.util.List<com.piggymetrics.statistics.domain.timeseries.DataPoint> getStatisticsByAccountName(java.security.Principal, java.lang.String)>'
+      # same as above
       security:
         - oauth2.hasScope('server')
         - name.equals('demo')
@@ -54,8 +59,10 @@ restapis:
           description: 'Not Found'
     PUT:
       method: '<com.piggymetrics.statistics.controller.StatisticsController: void saveAccountStatistics(java.lang.String, com.piggymetrics.statistics.domain.Account)>'
+      # method2: '<com.piggymetrics.statistics.service.StatisticsService: com.piggymetrics.statistics.domain.timeseries.DataPoint save(java.lang.String, com.piggymetrics.statistics.domain.Account)>'
       security:
         - oauth2.hasScope('server')
+        - @Valid @RequestBody
       parameters:
         accountName:
           in: path
