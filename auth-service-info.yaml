@@ -10,7 +10,8 @@ restapis:
   '/users/current':
     GET:
       method: '<com.piggymetrics.auth.controller.UserController: java.security.Principal getUser(java.security.Principal)>'
-      # security:
+      security:
+        - principal
       parameters:
         principal:
           in: body
@@ -32,6 +33,8 @@ restapis:
       method: '<com.piggymetrics.auth.controller.UserController: void createUser(com.piggymetrics.auth.domain.User)>'
       security:
         - oauth2.hasScope('server')
+        - @Valid
+        # - org.springframework.security.core.userdetails.UserDetails   # spring security?
       parameters:
         user:
           in: body
