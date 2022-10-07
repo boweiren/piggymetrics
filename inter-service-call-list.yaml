@@ -1,5 +1,6 @@
 interServiceCalls:
   '<com.piggymetrics.account.client.StatisticsServiceClient: java.util.List getStatisticsByAccountName(java.lang.String)>':
+    caller:
     serviceName: 'statistics-service'
     endpoint: '/statistics/{accountName}'
     httpMethod: GET
