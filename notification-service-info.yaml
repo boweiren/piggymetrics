@@ -72,4 +72,9 @@ calls:
       name:
         in: path
         type: java.lang.String
-        # security:
+    security:
+      - oauth2.hasScope('server')
+      - name.equals('demo')
+      - Assert.hasLength(accountName)
+      - @Valid
+    # fallback method:

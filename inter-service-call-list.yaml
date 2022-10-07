@@ -11,6 +11,7 @@ interServiceCalls:
     security:
       - oauth2.hasScope('server')
       - name.equals('demo')
+    fallback method: '<com.piggymetrics.account.client.StatisticsServiceClientFallback void updateStatistics(java.lang.String, com.piggymetrics.account.domain.Account)>'
 
   '<com.piggymetrics.account.client.AuthServiceClient: void createUser(com.piggymetrics.account.domain.User)>':
     caller: '<com.piggymetrics.account.service.AccountService: com.piggymetrics.account.domain.Account create(com.piggymetrics.account.domain.User)>'
@@ -24,6 +25,7 @@ interServiceCalls:
     security:
       - oauth2.hasScope('server')
       - @Valid
+    # fallback method:
 
   'com.piggymetrics.notification.client.AccountServiceClient: com.piggymetrics.account.domain.Account getAccountByName(java.lang.String)>':
     caller: inactive
@@ -38,4 +40,4 @@ interServiceCalls:
       - oauth2.hasScope('server')
       - name.equals('demo')
       - Assert.hasLength(accountName)
-
+    # fallback method:
