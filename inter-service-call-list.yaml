@@ -1,43 +1,50 @@
 interServiceCalls:
-  '<com.piggymetrics.account.client.StatisticsServiceClient: java.util.List getStatisticsByAccountName(java.lang.String)>':
-    caller: '<com.piggymetrics.account.service.AccountService: void saveChanges(java.lang.String, com.piggymetrics.account.domain.Account)>'
-    serviceName: 'statistics-service'
-    endpoint: '/statistics/{accountName}'
-    httpMethod: GET
-    parameters:
-      accountName:
-        in: path
-        type: java.lang.String
-    security:
-      - oauth2.hasScope('server')
-      - name.equals('demo')
-    fallback method: '<com.piggymetrics.account.client.StatisticsServiceClientFallback void updateStatistics(java.lang.String, com.piggymetrics.account.domain.Account)>'
+    1:
+        callerServiceName: 'account-service'    # the name of the service that calls the other service
+        calleeServiceName: 'statistics-service'   # the name of the service that is called
+        callerMethod: '<com.piggymetrics.account.service.AccountService: void saveChanges(java.lang.String, com.piggymetrics.account.domain.Account)>'  # the method that calls the other service
+        calleeMethod: '<com.piggymetrics.account.client.StatisticsServiceClient: java.util.List getStatisticsByAccountName(java.lang.String)>'  # the method that is called
+        endpoint: '/statistics/{accountName}'   # the api endpoint of the called service
+        httpMethod: GET  # the http method of the called service
+        parameters: # the arguments of the callee method
+            accountName:    # the name of the argument(s)
+                in: path    # the location of the argument(s)
+                type: java.lang.String  # the type of the argument(s)
+        security:   # the security method of the callee service
+            - oauth2.hasScope('server')
+            - name.equals('demo')
+        fallback method: '<com.piggymetrics.account.client.StatisticsServiceClientFallback void updateStatistics(java.lang.String, com.piggymetrics.account.domain.Account)>' # the fallback method of the caller service
+        # the fallback method will be called when the inter-service call fails
 
-  '<com.piggymetrics.account.client.AuthServiceClient: void createUser(com.piggymetrics.account.domain.User)>':
-    caller: '<com.piggymetrics.account.service.AccountService: com.piggymetrics.account.domain.Account create(com.piggymetrics.account.domain.User)>'
-    serviceName: 'auth-service'
-    endpoint: '/uaa/users'
-    httpMethod: POST
-    parameters:
-      user:
-        in: body
-        type: com.piggymetrics.account.domain.User
-    security:
-      - oauth2.hasScope('server')
-      - @Valid
-    # fallback method:
+    2:
+        callerServiceName: 'account-service'
+        calleeServiceName: 'auth-service'
+        callerMethod: '<com.piggymetrics.account.service.AccountService: com.piggymetrics.account.domain.Account create(com.piggymetrics.account.domain.User)>'
+        calleeMethod: '<com.piggymetrics.account.client.AuthServiceClient: void createUser(com.piggymetrics.account.domain.User)>'
+        endpoint: '/uaa/users'
+        httpMethod: POST
+        parameters:
+            user:
+                in: body
+                type: com.piggymetrics.account.domain.User
+        security:
+            - oauth2.hasScope('server')
+            - @Valid
+        # fallback method:
 
-  'com.piggymetrics.notification.client.AccountServiceClient: com.piggymetrics.account.domain.Account getAccountByName(java.lang.String)>':
-    caller: inactive
-    serviceName: 'account-service'
-    endpoint: '/accounts/{accountName}'
-    httpMethod: GET
-    parameters:
-      name:
-        in: path
-        type: java.lang.String
-    security:
-      - oauth2.hasScope('server')
-      - name.equals('demo')
-      - Assert.hasLength(accountName)
-    # fallback method:
+    3:
+        callerServiceName: 'notification-service'
+        calleeServiceName: 'account-service'
+        callerMethod: '<com.piggymetrics.notification.service.NotificationService: void sendBackupNotifications()'
+        calleeMethod: '<com.piggymetrics.notification.client.AccountServiceClient: com.piggymetrics.account.domain.Account getAccountByName(java.lang.String)>'
+        endpoint: '/accounts/{accountName}'
+        httpMethod: GET
+        parameters:
+            name:
+                in: path
+                type: java.lang.String
+        security:
+            - oauth2.hasScope('server')
+            - name.equals('demo')
+            - Assert.hasLength(accountName)
+        # fallback method:
