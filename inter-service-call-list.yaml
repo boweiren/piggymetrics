@@ -11,8 +11,9 @@ interServiceCalls:
                 in: path    # the location of the argument(s)
                 type: java.lang.String  # the type of the argument(s)
         security:   # the security method of the callee service
-            - oauth2.hasScope('server')
-            - name.equals('demo')
+            OR:
+                - oauth2.hasScope('server')
+                - name.equals('demo')
         fallback method: '<com.piggymetrics.account.client.StatisticsServiceClientFallback void updateStatistics(java.lang.String, com.piggymetrics.account.domain.Account)>' # the fallback method of the caller service
         # the fallback method will be called when the inter-service call fails
 
@@ -28,9 +29,11 @@ interServiceCalls:
                 in: body
                 type: com.piggymetrics.account.domain.User
         security:
-            - oauth2.hasScope('server')
-            - @Valid
+            AND:
+                - oauth2.hasScope('server')
+                - @Valid
         # fallback method:
+        # this inter-service call has no fallback method
 
     3:
         callerServiceName: 'notification-service'
@@ -44,7 +47,10 @@ interServiceCalls:
                 in: path
                 type: java.lang.String
         security:
-            - oauth2.hasScope('server')
-            - name.equals('demo')
-            - Assert.hasLength(accountName)
+            AND:
+                OR:
+                    - oauth2.hasScope('server')
+                    - name.equals('demo')
+                - Assert.hasLength(accountName)
         # fallback method:
+        # this inter-service call has no fallback method
