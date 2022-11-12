@@ -51,6 +51,6 @@ interServiceCalls:
                 OR:
                     - oauth2.hasScope('server')
                     - name.equals('demo')
-                - Assert.hasLength(accountName)
+                - hasLength(accountName)
         # fallback method:
         # this inter-service call has no fallback method
