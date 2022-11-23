@@ -120,14 +120,17 @@ restapis:
 
 
 calls:
-  '<com.piggymetrics.account.client.StatisticsServiceClient: java.util.List getStatisticsByAccountName(java.lang.String)>':
+  '<com.piggymetrics.account.client.StatisticsServiceClient: void saveAccountStatistics(java.lang.String)>':
     serviceName: 'statistics-service'
     endpoint: '/statistics/{accountName}'
-    httpMethod: GET
+    httpMethod: PUT
     parameters: 
       accountName: 
         in: path
         type: java.lang.String
+      account:
+        in: body
+        type: com.piggymetrics.account.domain.Account
     security:
       - oauth2.hasScope('server')
       - name.equals('demo')

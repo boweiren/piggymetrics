@@ -3,13 +3,15 @@ interServiceCalls:
         callerServiceName: 'account-service'    # the name of the service that calls the other service
         calleeServiceName: 'statistics-service'   # the name of the service that is called
         callerMethod: '<com.piggymetrics.account.service.AccountService: void saveChanges(java.lang.String, com.piggymetrics.account.domain.Account)>'  # the method that calls the other service
-        calleeMethod: '<com.piggymetrics.account.client.StatisticsServiceClient: java.util.List getStatisticsByAccountName(java.lang.String)>'  # the method that is called
         endpoint: '/statistics/{accountName}'   # the api endpoint of the called service
-        httpMethod: GET  # the http method of the called service
+        httpMethod: PUT  # the http method of the called service
         parameters: # the arguments of the callee method
             accountName:    # the name of the argument(s)
                 in: path    # the location of the argument(s)
                 type: java.lang.String  # the type of the argument(s)
+            account:
+                in: body
+                type: com.piggymetrics.account.domain.Account
         security:   # the security method of the callee service
             OR:
                 - oauth2.hasScope('server')
@@ -21,7 +23,6 @@ interServiceCalls:
         callerServiceName: 'account-service'
         calleeServiceName: 'auth-service'
         callerMethod: '<com.piggymetrics.account.service.AccountService: com.piggymetrics.account.domain.Account create(com.piggymetrics.account.domain.User)>'
-        calleeMethod: '<com.piggymetrics.account.client.AuthServiceClient: void createUser(com.piggymetrics.account.domain.User)>'
         endpoint: '/uaa/users'
         httpMethod: POST
         parameters:
@@ -39,8 +40,26 @@ interServiceCalls:
         callerServiceName: 'notification-service'
         calleeServiceName: 'account-service'
         callerMethod: '<com.piggymetrics.notification.service.NotificationService: void sendBackupNotifications()'
-        calleeMethod: '<com.piggymetrics.notification.client.AccountServiceClient: com.piggymetrics.account.domain.Account getAccountByName(java.lang.String)>'
         endpoint: '/accounts/{accountName}'
+        httpMethod: GET
+        parameters:
+            name:
+                in: path
+                type: java.lang.String
+        security:
+            AND:
+                OR:
+                    - oauth2.hasScope('server')
+                    - name.equals('demo')
+                - hasLength(accountName)
+        # fallback method:
+        # this inter-service call has no fallback method
+
+    4:
+        callerServiceName: 'INACTIVE'
+        calleeServiceName: 'statistics-service'
+        callerMethod: 'INACTIVE'
+        endpoint: '/statistics/{accountName}'
         httpMethod: GET
         parameters:
             name:
